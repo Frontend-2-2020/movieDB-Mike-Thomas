@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
 
-class index extends Component {
-    render() {
-        return (
-            <div>
-                
-            </div>
-        );
-    }
-}
+import ReactDOM from "react-dom";
+import App from "./App";
 
-export default index;
+ReactDOM.render(<App />, document.getElementById('root'))
