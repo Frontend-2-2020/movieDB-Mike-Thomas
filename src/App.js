@@ -18,9 +18,7 @@ class App extends Component {
             <span>by Mike & Thomas</span>
         </div>  
       <Router>
-          <Link to="/">Home</Link>
-          <Link to="/movie">Detail</Link>
-
+          
           <Switch>
             <Route path="/movie/:id" component={Detail}></Route>
             <Route path={["/", "/:page"]} exact component={Home}></Route>
