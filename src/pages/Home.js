@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { API_KEY } from '../config';
 import MovieCard from '../components/MovieCard';
-import { Container, CardGroup } from 'react-bootstrap';
+import { Container, CardDeck } from 'react-bootstrap';
+import Pagination from '../components/Pagination';
 
 
 class Home extends Component {
@@ -13,8 +14,13 @@ class Home extends Component {
         movies: []
     }
 
+
     componentDidMount(){
-        axios.get("https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY + "&sort_by=popularity.desc").then(response => {
+        this.fetchData();
+    }
+
+    fetchData = () => {
+        axios.get("https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY + "&sort_by=popularity.desc&page=" + this.state.currentPage).then(response => {
             console.log(response.data);
             
             // Put axios data in state
@@ -26,25 +32,38 @@ class Home extends Component {
             console.log(this.state);
         });
     }
+
+    increasePage = () => {
+        const newPage = this.state.currentPage + 1;
+        console.log(newPage);
+        this.setState({
+            currentPage: newPage
+        },()=> {this.fetchData()});
+    }
+
+    decreasePage = () => {
+        const newPage = this.state.currentPage - 1;
+        console.log(newPage);
+        this.setState({
+            currentPage: newPage
+        },()=> {this.fetchData()});
+    }
     
     render() {
-        const {movies} = this.state;
+        const {movies, currentPage} = this.state;
+
+        
 
         return (
-            <div>
-                <Container>
-                    <h1>Home</h1>
-                    <CardGroup>
-                    {movies.map((movie) =>
-                        <MovieCard key={movie.id} movie={movie}/>
-                    )}
-                    </CardGroup>
-                        
-                </Container>
-                
-                
-                
-            </div>
+            <div className="container p-3">
+                <Pagination className="sticky" currentPage={currentPage} increasePage={this.increasePage} decreasePage={this.decreasePage}/>
+                <CardDeck className="d-flex">
+                {movies.map((movie) =>
+                    <MovieCard key={movie.id} movie={movie}/>
+                )}
+                </CardDeck>
+            </div>                   
+
         );
     }
 }
